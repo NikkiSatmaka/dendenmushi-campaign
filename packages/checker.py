@@ -70,3 +70,44 @@ def check_missing(data):
     data_missing['tot_missing_pct'] = data_missing['tot_missing'] / len(data) * 100
 
     return data_missing
+
+
+def check_missing_special(data):
+    """
+    Function to check special missing values in dataset
+    which has the value 'unknown', 'nonexistent', or 999
+
+    Parameters:
+    -----------
+    data (dataframe): dataframe to be checked
+
+    Returns:
+    --------
+    missing_values (dataframe): dataframe with missing values
+    """
+    # create dictionary to store missing values
+    missing_values = {
+        'feats': [],
+        'tot_missing': [],
+        'tot_missing_pct': []
+    }
+
+    # Loop through the columns
+    for col in data.columns:
+        if 'unknown' not in data[col].values and \
+            'nonexistent' not in data[col].values and \
+                999 not in data[col].values:
+            continue
+        if 'unknown' in data[col].values:
+            tot_missval = len(data[data[col] == 'unknown'])
+        if 999 in data[col].values:
+            tot_missval = len(data[data[col] == 999])
+
+        missing_values['feats'].append(col)
+        missing_values['tot_missing'].append(tot_missval)
+        missing_values['tot_missing_pct'].append(tot_missval / len(data) * 100)
+
+    # create a dataframe with the missing values dictionary
+    missing_values = pd.DataFrame(missing_values)
+
+    return missing_values

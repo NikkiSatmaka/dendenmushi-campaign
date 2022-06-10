@@ -24,7 +24,7 @@ msg_1_act = "Call him immediately!"
 msg_1_add = "Fingers crossed for you"
 msg_goodluck = "Good Luck!"
 
-img_crystal = Image.open('assets/crystal-ball.png')
+img_crystal = Image.open('assets/crystal-ball.jpg')
 img_res_0 = Image.open('assets/four-leaf-clover.jpg')
 img_res_1 = Image.open('assets/fingers-crossed.jpg')
 

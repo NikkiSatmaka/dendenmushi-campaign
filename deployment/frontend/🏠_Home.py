@@ -23,7 +23,6 @@ img_source = "[deviantart](https://www.deviantart.com/drnachtschatten/art/Den-De
 # Title of the main page
 col1, col2 = st.columns(2)
 col1.image(logo, width=300)
-col1.markdown('')
 col1.markdown(f'image is rightfully owned by {img_source}', unsafe_allow_html=True)
 col2.title(TITLE)
 

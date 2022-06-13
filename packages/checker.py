@@ -72,19 +72,23 @@ def check_missing(data):
     return data_missing
 
 
-def check_missing_special(data):
+def check_missing_special(data, *args):
     """
     Function to check special missing values in dataset
-    which has the value 'unknown', 'nonexistent', or 999
+    (e.g. missing values in categorical features)
+    and return a DataFrame with the missing values and their percentage
 
     Parameters:
     -----------
     data (dataframe): dataframe to be checked
+    *args : list of special keywords representing the missing values
 
-    Returns:
-    --------
-    missing_values (dataframe): dataframe with missing values
+    Returns
+    -------
+    DataFrame
+        Missing values in dataset
     """
+
     # create dictionary to store missing values
     missing_values = {
         'feats': [],
@@ -94,20 +98,24 @@ def check_missing_special(data):
 
     # Loop through the columns
     for col in data.columns:
-        if 'unknown' not in data[col].values and \
-            'nonexistent' not in data[col].values and \
-                999 not in data[col].values:
-            continue
-        if 'unknown' in data[col].values:
-            tot_missval = len(data[data[col] == 'unknown'])
-        if 999 in data[col].values:
-            tot_missval = len(data[data[col] == 999])
-
+        # set total missing values to 0
+        tot_missval = 0
+        # Loop through special keywords representing missing values
+        for missval in args:
+            if missval not in data[col].unique():
+                continue
+            # count the number of missing values
+            tot_missval += len(data[data[col] == missval])
+        
+        # add the missing values to the dictionary
         missing_values['feats'].append(col)
         missing_values['tot_missing'].append(tot_missval)
         missing_values['tot_missing_pct'].append(tot_missval / len(data) * 100)
 
     # create a dataframe with the missing values dictionary
     missing_values = pd.DataFrame(missing_values)
+    
+    # drop the rows with no missing values
+    missing_values = missing_values[missing_values['tot_missing'] > 0]
 
     return missing_values
